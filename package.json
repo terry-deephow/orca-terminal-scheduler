@@ -4,6 +4,10 @@
   "description": "Schedule automated commands and prompts to send to Orca terminals and AI agents",
   "type": "module",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/terry-deephow/orca-terminal-scheduler.git"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format esm --out-dir dist --clean --minify",
     "dev": "tsup src/index.ts --format esm --out-dir dist --watch",
@@ -17,7 +21,7 @@
     "terminal",
     "automation"
   ],
-  "author": "kmshiori",
+  "author": "terry-deephow",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.0.0",

@@ -20,7 +20,7 @@ This plugin follows the Orca Plugin Specification (`manifestVersion: 1`, `plugin
 {
   "manifestVersion": 1,
   "id": "orca-terminal-scheduler",
-  "publisher": "kmshiori",
+  "publisher": "terry-deephow",
   "name": "Orca Terminal Scheduler",
   "version": "1.0.0",
   "description": "Schedule automated commands and prompts to send to Orca terminals and AI agents",
@@ -67,57 +67,53 @@ This plugin follows the Orca Plugin Specification (`manifestVersion: 1`, `plugin
 
 ---
 
-## Development
+## Development & Local Installation
 
-### 1. Install Dependencies
+### 1. Install Dependencies & Build
 ```bash
 npm install
-```
-
-### 2. Build the Plugin
-```bash
 npm run build
 ```
-This compiles `src/index.ts` into a standalone bundle at `dist/index.js`.
 
-### 3. Local Testing in Orca
-To test locally in your Orca application:
-Link or copy this plugin directory into your Orca plugins directory:
+### 2. Local Installation into Orca
+To install this plugin directly in your Orca application:
 ```bash
 # macOS
-mkdir -p "$HOME/Library/Application Support/Orca/plugins/kmshiori.orca-terminal-scheduler"
-cp -r . "$HOME/Library/Application Support/Orca/plugins/kmshiori.orca-terminal-scheduler/"
+mkdir -p "$HOME/Library/Application Support/Orca/plugins/terry-deephow.orca-terminal-scheduler"
+cp -r . "$HOME/Library/Application Support/Orca/plugins/terry-deephow.orca-terminal-scheduler/"
 ```
 
 ---
 
-## Publishing to Orca Users
+## Installing & Publishing
 
-### Step 1: Push to GitHub
-1. Create a public repository on GitHub (e.g. `https://github.com/kmshiori/orca-terminal-scheduler`).
-2. Tag your release:
-   ```bash
-   git tag v1.0.0
-   git push origin main --tags
-   ```
+### Self Installation (from GitHub)
+Users or developers can clone and link this repository:
+```bash
+git clone https://github.com/terry-deephow/orca-terminal-scheduler.git
+cd orca-terminal-scheduler
+npm install && npm run build
+mkdir -p "$HOME/Library/Application Support/Orca/plugins/terry-deephow.orca-terminal-scheduler"
+cp -r . "$HOME/Library/Application Support/Orca/plugins/terry-deephow.orca-terminal-scheduler/"
+```
 
-### Step 2: Submit to Orca Marketplace
-To make it installable for all Orca users via the in-app Plugin Catalog:
-1. Fork the official [stablyai/orca-plugins](https://github.com/stablyai/orca-plugins) repository.
+### Submitting to Orca Marketplace
+To make it discoverable in Orca's public Plugin Catalog:
+1. Fork [stablyai/orca-plugins](https://github.com/stablyai/orca-plugins).
 2. Add your plugin to `orca-marketplace.json`:
    ```json
    {
-     "id": "kmshiori.orca-terminal-scheduler",
+     "id": "terry-deephow.orca-terminal-scheduler",
      "source": {
        "kind": "git",
-       "url": "https://github.com/kmshiori/orca-terminal-scheduler.git",
+       "url": "https://github.com/terry-deephow/orca-terminal-scheduler.git",
        "ref": "v1.0.0"
      },
      "description": "Schedule automated commands and prompts to send to Orca terminals and AI agents",
      "categories": ["developer-tools", "automation"]
    }
    ```
-3. Submit a Pull Request to `stablyai/orca-plugins`. Once merged, users can discover and install your plugin directly inside Orca!
+3. Submit a Pull Request.
 
 ---
 

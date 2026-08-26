@@ -1,15 +1,15 @@
 {
   "manifestVersion": 1,
   "id": "orca-terminal-scheduler",
-  "publisher": "kmshiori",
+  "publisher": "terry-deephow",
   "name": "Orca Terminal Scheduler",
   "version": "1.0.0",
   "description": "Schedule automated commands and prompts to send to Orca terminals and AI agents",
   "author": {
-    "name": "kmshiori",
-    "url": "https://github.com/kmshiori"
+    "name": "terry-deephow",
+    "url": "https://github.com/terry-deephow"
   },
-  "repository": "https://github.com/kmshiori/orca-terminal-scheduler",
+  "repository": "https://github.com/terry-deephow/orca-terminal-scheduler",
   "engines": {
     "orca": ">=1.4.0"
   },
