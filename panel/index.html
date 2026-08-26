@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal Scheduler</title>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --card-bg: #171717;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #ededed;
+      --text-muted: #888888;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --success: #10b981;
+      --input-bg: #222222;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-family);
+      font-size: 12px;
+      line-height: 1.4;
+      padding: 12px;
+    }
+
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 7px 9px;
+      font-size: 12px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 54px;
+      font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+      font-size: 11px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 500;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #333;
+      color: #ccc;
+    }
+    .btn-secondary:hover {
+      background: #444;
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+    }
+    .btn-danger:hover {
+      background: var(--danger-hover);
+    }
+
+    .task-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .task-title {
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-running {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+    }
+
+    .badge-stopped {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    .task-cmd {
+      background: #111;
+      border-radius: 4px;
+      padding: 5px 7px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #60a5fa;
+      word-break: break-all;
+      margin-bottom: 6px;
+    }
+
+    .task-meta {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .task-actions .btn {
+      padding: 4px 8px;
+      font-size: 11px;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <h2>⏱️ Terminal Scheduler</h2>
+
+  <div class="card">
+    <div class="form-group">
+      <label for="taskName">Task Name</label>
+      <input id="taskName" type="text" placeholder="e.g. Code Review Ping" value="Automated Review Ping" />
+    </div>
+
+    <div class="form-group">
+      <label for="taskInterval">Interval (Seconds)</label>
+      <input id="taskInterval" type="number" min="5" value="60" />
+    </div>
+
+    <div class="form-group">
+      <label for="taskCommand">Command / Agent Prompt</label>
+      <textarea id="taskCommand" placeholder="e.g. echo 'Running checks...' or /review">echo '[Scheduler] Running periodic healthcheck...'</textarea>
+    </div>
+
+    <button id="createTaskBtn" class="btn">Add & Start Schedule</button>
+  </div>
+
+  <h2>📋 Active Schedules</h2>
+  <div id="tasksContainer">
+    <p style="color: var(--text-muted); font-size: 11px;">Loading schedules...</p>
+  </div>
+
+  <script>
+    let localTasks = [];
+
+    function postToHost(message) {
+      window.parent.postMessage(message, '*');
+    }
+
+    function refreshStatus() {
+      postToHost({
+        type: 'invokeCommand',
+        commandId: 'scheduler.status'
+      });
+    }
+
+    function renderTasks(tasks) {
+      const container = document.getElementById('tasksContainer');
+      if (!tasks || tasks.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 11px;">No active schedules yet.</p>';
+        return;
+      }
+
+      container.innerHTML = tasks.map(task => `
+        <div class="task-item">
+          <div class="task-header">
+            <span class="task-title">${escapeHtml(task.name)}</span>
+            <span class="badge ${task.active ? 'badge-running' : 'badge-stopped'}">
+              ${task.active ? 'Active' : 'Paused'}
+            </span>
+          </div>
+          <div class="task-cmd">${escapeHtml(task.command)}</div>
+          <div class="task-meta">
+            <span>Interval: ${task.intervalSec}s</span>
+            <span>Runs: ${task.runCount || 0}</span>
+            <span>Last: ${task.lastRunAt ? new Date(task.lastRunAt).toLocaleTimeString() : 'Never'}</span>
+          </div>
+          <div class="task-actions">
+            ${task.active ? `
+              <button class="btn btn-secondary" onclick="stopTask('${task.id}')">Pause</button>
+            ` : `
+              <button class="btn btn-secondary" onclick="startExistingTask('${task.id}', '${escapeAttr(task.name)}', '${escapeAttr(task.command)}', ${task.intervalSec})">Resume</button>
+            `}
+            <button class="btn btn-danger" onclick="deleteTask('${task.id}')">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function escapeAttr(str) {
+      return (str || '').replace(/'/g, "\\'");
+    }
+
+    window.startExistingTask = (id, name, command, intervalSec) => {
+      postToHost({
+        type: 'invokeCommand',
+        commandId: 'scheduler.start',
+        args: { id, name, command, intervalSec }
+      });
+      setTimeout(refreshStatus, 300);
+    };
+
+    window.stopTask = (id) => {
+      postToHost({
+        type: 'invokeCommand',
+        commandId: 'scheduler.stop',
+        args: { id }
+      });
+      setTimeout(refreshStatus, 300);
+    };
+
+    window.deleteTask = (id) => {
+      postToHost({
+        type: 'invokeCommand',
+        commandId: 'scheduler.stop',
+        args: { id }
+      });
+      setTimeout(refreshStatus, 300);
+    };
+
+    document.getElementById('createTaskBtn').onclick = () => {
+      const name = document.getElementById('taskName').value.trim() || 'Scheduled Task';
+      const intervalSec = parseInt(document.getElementById('taskInterval').value, 10) || 60;
+      const command = document.getElementById('taskCommand').value.trim() || 'echo ping';
+
+      postToHost({
+        type: 'invokeCommand',
+        commandId: 'scheduler.start',
+        args: { name, intervalSec, command }
+      });
+
+      setTimeout(refreshStatus, 300);
+    };
+
+    // Listen for replies from Orca host
+    window.addEventListener('message', (event) => {
+      const data = event.data;
+      if (data && data.type === 'commandResult' && data.value && data.value.tasks) {
+        localTasks = data.value.tasks;
+        renderTasks(localTasks);
+      }
+    });
+
+    // Auto-refresh status every 5 seconds
+    setInterval(refreshStatus, 5000);
+    refreshStatus();
+  </script>
+</body>
+</html>

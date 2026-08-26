@@ -1,0 +1,27 @@
+{
+  "name": "orca-terminal-scheduler",
+  "version": "1.0.0",
+  "description": "Schedule automated commands and prompts to send to Orca terminals and AI agents",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --out-dir dist --clean --minify",
+    "dev": "tsup src/index.ts --format esm --out-dir dist --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "orca",
+    "orca-plugin",
+    "agent",
+    "scheduler",
+    "terminal",
+    "automation"
+  ],
+  "author": "kmshiori",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.5.4"
+  }
+}

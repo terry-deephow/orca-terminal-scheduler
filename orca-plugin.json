@@ -1,0 +1,51 @@
+{
+  "manifestVersion": 1,
+  "id": "orca-terminal-scheduler",
+  "publisher": "kmshiori",
+  "name": "Orca Terminal Scheduler",
+  "version": "1.0.0",
+  "description": "Schedule automated commands and prompts to send to Orca terminals and AI agents",
+  "author": {
+    "name": "kmshiori",
+    "url": "https://github.com/kmshiori"
+  },
+  "repository": "https://github.com/kmshiori/orca-terminal-scheduler",
+  "engines": {
+    "orca": ">=1.4.0"
+  },
+  "pluginApi": 1,
+  "main": "dist/index.js",
+  "capabilities": [
+    { "kind": "workspace:read" },
+    { "kind": "terminal:send" },
+    { "kind": "notifications:show" },
+    { "kind": "storage" }
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "id": "scheduler.start",
+        "title": "Start Terminal Scheduler",
+        "context": "global"
+      },
+      {
+        "id": "scheduler.stop",
+        "title": "Stop Terminal Scheduler",
+        "context": "global"
+      },
+      {
+        "id": "scheduler.status",
+        "title": "Get Scheduler Status",
+        "context": "global"
+      }
+    ],
+    "panels": [
+      {
+        "id": "scheduler-panel",
+        "title": "Scheduler",
+        "icon": "clock",
+        "entry": "panel/index.html"
+      }
+    ]
+  }
+}
